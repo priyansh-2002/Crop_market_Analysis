@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commodity Market Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --white: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            width: full;
+            
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+            
+        }
+        
+        .container {
+            max-width: full;
+            margin: 20 auto;
+            padding: 0 2rem;
+        }
+        
+        /* Header Styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 1rem;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-weight: bold;
+        }
+        
+        .header-date {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        /* Performance Section */
+        .performance-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.performance-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.performance-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.performance-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.performance-title i {
+    margin-right: 0.5rem;
+    font-size: 1rem;
+}
+
+.performance-list {
+    list-style: none;
+}
+
+.performance-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 0;
+}
+
+.performance-item:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.commodity-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.rank {
+    width: 24px;
+    height: 24px;
+    background-color: rgba(67, 97, 238, 0.1);
+    color: var(--primary);
+    border-radius: 6px;
+    display: grid;
+    place-items: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.commodity-name {
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.price-info {
+    text-align: right;
+}
+
+.current-price {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.1rem;
+}
+
+.price-change {
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.2rem 0.6rem;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+.price-up {
+    background-color: rgba(76, 201, 240, 0.1);
+    color: var(--success);
+}
+
+.price-down {
+    background-color: rgba(247, 37, 133, 0.1);
+    color: var(--danger);
+}
+        /* Commodities Grid Section */
+        .commodities-section {
+            margin: 3rem 0;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+        
+        .commodities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .commodity-card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .commodity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+        
+        .commodity-link {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .commodity-image {
+            height: 160px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .commodity-content {
+            padding: 1.25rem;
+        }
+        
+        .commodity-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .commodity-meta {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+        
+        .commodity-type {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1.5rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        @media (max-width: 768px) {
+            .performance-section {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .header-date {
+                margin-top: 0.5rem;
+                align-self: flex-end;
+            }
+            
+            .commodities-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .commodities-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <div class="logo-icon">M</div>
+                <div class="logo">Market Analysis > Dashboard</div>
+            </div>
+            <div class="header-date">
+            </div>
+        </header>
+        
+        <div class="performance-section">
+            <div class="performance-card">
+                <h2 class="performance-title">
+                    <i class="fas fa-chart-line" style="color: var(--success); margin-right: 0.75rem;"></i>
+                    Top Performers
+                </h2>
+                <ul class="performance-list">
+                    {% for item in context.top5 %}
+                    <li class="performance-item">
+                        <div class="commodity-info">
+                            <div class="rank">{{ item.rank }}</div>
+                            <div class="commodity-name">{{ item.commodity }}</div>
+                        </div>
+                        <div class="price-info">
+                            <div class="current-price">₹{{ "%.2f"|format(item.current_price) }}</div>
+                            <span class="price-change {% if item.percentage_change >= 0 %}price-up{% else %}price-down{% endif %}">
+                                {{ "%+.2f"|format(item.percentage_change) }}%
+                            </span>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            <div class="performance-card">
+                <h2 class="performance-title">
+                    <i class="fas fa-chart-line fa-flip-vertical" style="color: var(--danger); margin-right: 0.75rem;"></i>
+                    Bottom Performers
+                </h2>
+                <ul class="performance-list">
+                    {% for item in context.bottom5 %}
+                    <li class="performance-item">
+                        <div class="commodity-info">
+                            <div class="rank">{{ item.rank }}</div>
+                            <div class="commodity-name">{{ item.commodity }}</div>
+                        </div>
+                        <div class="price-info">
+                            <div class="current-price">₹{{ "%.2f"|format(item.current_price) }}</div>
+                            <span class="price-change {% if item.percentage_change >= 0 %}price-up{% else %}price-down{% endif %}">
+                                {{ "%+.2f"|format(item.percentage_change) }}%
+                            </span>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Commodities Grid Section -->
+        <div class="commodities-section">
+            <h2 class="section-title">All Commodities</h2>
+            <div class="commodities-grid">
+                <!-- JavaScript will populate this section -->
+            </div>
+        </div>
+        
+        <footer>
+        </footer>
+    </div>
+
+    <script>
+        // Commodity data - same structure as your Python dictionary
+        const cropData = {
+            "wheat": ["/static/images/wheat.jpg", "U.P., Punjab, Haryana, Rajasthan, M.P., Bihar", "rabi", "Sri Lanka, United Arab Emirates, Taiwan"],
+            "paddy": ["/static/images/paddy.jpg", "W.B., U.P., Andhra Pradesh, Punjab, T.N.", "kharif", "Bangladesh, Saudi Arabia, Iran"],
+            "barley": ["/static/images/barley.jpg", "Rajasthan, Uttar Pradesh, Madhya Pradesh, Haryana, Punjab", "rabi", "Oman, UK, Qatar, USA"],
+            "maize": ["/static/images/maize.jpg", "Karnataka, Andhra Pradesh, Tamil Nadu, Rajasthan, Maharashtra", "kharif", "Hong Kong, United Arab Emirates, France"],
+            "bajra": ["/static/images/bajra.jpg", "Rajasthan, Maharashtra, Haryana, Uttar Pradesh and Gujarat", "kharif", "Oman, Saudi Arabia, Israel, Japan"],
+            "copra": ["/static/images/copra.jpg", "Kerala, Tamil Nadu, Karnataka, Andhra Pradesh, Orissa, West Bengal", "rabi", "Vietnam, Bangladesh, Iran, Malaysia"],
+            "cotton": ["/static/images/cotton.jpg", "Punjab, Haryana, Maharashtra, Tamil Nadu, Madhya Pradesh, Gujarat", "kharif", "China, Bangladesh, Egypt"],
+            "masoor": ["/static/images/masoor.jpg", "Uttar Pradesh, Madhya Pradesh, Bihar, West Bengal, Rajasthan", "rabi", "Pakistan, Cyprus, United Arab Emirates"],
+            "gram": ["/static/images/gram.jpg", "Madhya Pradesh, Maharashtra, Rajasthan, Uttar Pradesh, Andhra Pradesh & Karnataka", "rabi", "Vietnam, Spain, Myanmar"],
+            "groundnut": ["/static/images/groundnut.jpg", "Andhra Pradesh, Gujarat, Tamil Nadu, Karnataka, and Maharashtra", "kharif", "Indonesia, Jordan, Iraq"],
+            "arhar": ["/static/images/arhar.jpg", "Maharashtra, Karnataka, Madhya Pradesh and Andhra Pradesh", "kharif", "United Arab Emirates, USA, Chicago"],
+            "sesamum": ["/static/images/sesamum.jpg", "Maharashtra, Rajasthan, West Bengal, Andhra Pradesh, Gujarat", "rabi", "Iraq, South Africa, USA, Netherlands"],
+            "jowar": ["/static/images/jowar.jpg", "Maharashtra, Karnataka, Andhra Pradesh, Madhya Pradesh, Gujarat", "kharif", "Toronto, Sydney, New York"],
+            "moong": ["/static/images/moong.jpeg", "Rajasthan, Maharashtra, Andhra Pradesh", "rabi", "Qatar, United States, Canada"],
+            "niger": ["/static/images/niger.jpg", "Andhra Pradesh, Assam, Chhattisgarh, Gujarat, Jharkhand", "kharif", "United States, Argentina, Belgium"],
+            "rape": ["/static/images/rape.jpg", "Rajasthan, Uttar Pradesh, Haryana, Madhya Pradesh, and Gujarat", "rabi", "Vietnam, Malaysia, Taiwan"],
+            "jute": ["/static/images/jute.jpg", "West Bengal, Assam, Orissa, Bihar, Uttar Pradesh", "kharif", "Jordan, United Arab Emirates, Taiwan"],
+            "safflower": ["/static/images/safflower.jpg", "Maharashtra, Karnataka, Andhra Pradesh, Madhya Pradesh, Orissa", "kharif", "Philippines, Taiwan, Portugal"],
+            "soyabean": ["/static/images/soyabean.jpg", "Madhya Pradesh, Maharashtra, Rajasthan", "kharif", "Spain, Thailand, Singapore"],
+            "urad": ["/static/images/urad.jpg", "Andhra Pradesh, Maharashtra, Madhya Pradesh, Tamil Nadu", "rabi", "United States, Canada, United Arab Emirates"],
+            "ragi": ["/static/images/ragi.jpg", "Maharashtra, Tamil Nadu and Uttarakhand", "kharif", "United Arab Emirates, New Zealand, Bahrain"],
+            "sunflower": ["/static/images/sunflower.jpg", "Karnataka, Andhra Pradesh, Maharashtra, Bihar, Orissa", "rabi", "Philippines, United States, Bangladesh"],
+            "sugarcane": ["/static/images/sugarcane.jpg", "Uttar Pradesh, Maharashtra, Tamil Nadu, Karnataka, Andhra Pradesh", "kharif", "Kenya, United Arab Emirates, United Kingdom"]
+        };
+
+        // Function to render commodity cards
+        function renderCommodityCards() {
+            const grid = document.querySelector('.commodities-grid');
+            
+            Object.entries(cropData).forEach(([name, data]) => {
+                const [imageUrl, regions, cropType, exportTo] = data;
+                
+                const card = document.createElement('div');
+                card.className = 'commodity-card';
+                
+                card.innerHTML = `
+                    <a href="/commodity/${name.toLowerCase()}" class="commodity-link">
+                        <div class="commodity-image" style="background-image: url('${imageUrl}')"></div>
+                        <div class="commodity-content">
+                            <h3 class="commodity-name">${name.charAt(0).toUpperCase() + name.slice(1)}</h3>
+                            <p class="commodity-meta"><strong>Regions:</strong> ${regions}</p>
+                            <p class="commodity-meta"><strong>Exports to:</strong> ${exportTo}</p>
+                            <span class="commodity-type">${cropType.toUpperCase()}</span>
+                        </div>
+                    </a>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', renderCommodityCards);
+    </script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ context.name|capitalize }} - Commodity Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: full;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .commodity-header {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .commodity-image {
+            width: 300px;
+            height: 200px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .commodity-info {
+            flex: 1;
+        }
+        
+        .commodity-name {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .commodity-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .commodity-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .meta-item {
+            background: var(--white);
+            padding: 12px 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .meta-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+        
+        .meta-value {
+            font-weight: 600;
+        }
+        
+        .price-range {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .range-item {
+            flex: 1;
+            background: var(--white);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        
+        .range-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .range-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .chart-container {
+            background: var(--white);
+            padding: 20px;
+            align-items: center;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        #priceChart {
+            height: 400px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .data-table th {
+            font-weight: 600;
+            color: var(--gray);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            color: var(--gray);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .commodity-header {
+                flex-direction: column;
+            }
+            
+            .commodity-image {
+                width: 100%;
+            }
+            
+            .commodity-meta, .price-range {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">Markrt Analysis > {{ context.name }} </div>
+            <a href="/" class="back-link">← Back to Dashboard</a>
+        </header>
+        
+        <div class="commodity-header">
+            <img src="{{ context.image_url }}" alt="{{ context.name }}" class="commodity-image">
+            <div class="commodity-info">
+                <h1 class="commodity-name">{{ context.name|capitalize }}</h1>
+                <div class="commodity-price">₹{{ "%.2f"|format(context.current_price) }}</div>
+                
+                <div class="commodity-meta">
+                    <div class="meta-item">
+                        <div class="meta-label">Type</div>
+                        <div class="meta-value">{{ context.type_c }}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Export</div>
+                        <div class="meta-value">{{ context.export }}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Primary Locations</div>
+                        <div class="meta-value">{{ context.prime_loc }}</div>
+                    </div>
+                </div>
+                
+                <div class="price-range">
+                    <div class="range-item">
+                        <div class="range-value">₹{{ "%.2f"|format(context.min_crop) }}</div>
+                        <div class="range-label">Minimum Price</div>
+                    </div>
+                    <div class="range-item">
+                        <div class="range-value">₹{{ "%.2f"|format(context.max_crop) }}</div>
+                        <div class="range-label">Maximum Price</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <h2 class="chart-title">Price Trend Analysis</h2>
+            <div id="priceChart"></div>
+        </div>
+        
+        <h2>Historical Data</h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Month/Year</th>
+                    <th>Price (₹/quintal)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(context.previous_x|length) %}
+                <tr>
+                    <td>{{ context.previous_x[i] }}</td>
+                    <td>₹{{ "%.2f"|format(context.previous_y[i]) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <h2>Price Forecast</h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Month/Year</th>
+                    <th>Forecast Price (₹/quintal)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(context.forecast_x|length) %}
+                <tr>
+                    <td>{{ context.forecast_x[i] }}</td>
+                    <td>₹{{ "%.2f"|format(context.forecast_y[i]) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <footer>
+        </footer>
+    </div>
+    
+    <script>
+             try {
+        var graphData = JSON.parse('{{ context.price_chart_json|tojson|safe }}');
+        
+        // Debug output to verify the data
+        console.log("Chart Data:", graphData);
+        
+        if (graphData && graphData.data && graphData.layout) {
+            Plotly.newPlot('priceChart', graphData.data, graphData.layout);
+        } else {
+            console.error("Missing required chart data properties");
+        }
+    } catch (e) {
+        console.error("Error parsing chart data:", e);
+    }
+    </script>
+</body>
+</html>
